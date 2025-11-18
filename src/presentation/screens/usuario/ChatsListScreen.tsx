@@ -1,79 +1,83 @@
-import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { UsuarioTabScreenProps } from "../../navigation/types";
-import { useChatStore } from "../../store/chatStore";
-import { colors } from "../../styles/colors";
-import { spacing, fontSize } from "../../styles/spacing";
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { chatRepository } from '../../../data/repositories/ChatRepository';
 
-type Props = UsuarioTabScreenProps<"ChatTab">;
 
-const ChatsListScreen: React.FC<Props> = ({ navigation }) => {
-  const { chats, fetchChats } = useChatStore();
+interface ChatItem {
+  id: string;
+  contratacionId: string;
+  ultimoMensaje: string;
+  fecha: string;
+}
+
+const ChatsListScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const [chats, setChats] = useState<ChatItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const cargarChats = async () => {
+    try {
+      const data = await chatRepository.getUserChats(); // ajusta si tu método tiene otro nombre
+      setChats(data || []);
+    } catch (error) {
+      console.error('Error cargando chats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchChats(); // Obtener lista de chats del usuario
+    cargarChats();
   }, []);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scroll}>
-        <Text style={styles.title}>Mis Chats 💬</Text>
+  const abrirChat = (chat: ChatItem) => {
+    console.log('📨 Navegando a Chat con contratacionId =', chat.contratacionId);
 
-        {chats.length === 0 ? (
-          <Text style={styles.emptyText}>No tienes chats todavía.</Text>
-        ) : (
-          chats.map((chat) => (
-            <TouchableOpacity
-              key={chat.id}
-              style={styles.chatItem}
-              onPress={() =>
-                navigation.navigate("Chat", { contratacionId: chat.contratacionId })
-              }
-            >
-              <Text style={styles.chatTitle}>{chat.planNombre}</Text>
-              <Text style={styles.chatSubtitle}>Toca para continuar el chat →</Text>
-            </TouchableOpacity>
-          ))
-        )}
-      </ScrollView>
-    </SafeAreaView>
+    const parent = navigation.getParent();
+    if (parent) {
+      parent.navigate('Chat' as never, { contratacionId: chat.contratacionId } as never);
+      return;
+    }
+
+    // Fallback improbable
+    navigation.navigate('Chat' as never, { contratacionId: chat.contratacionId } as never);
+  };
+
+  const renderItem = ({ item }: { item: ChatItem }) => (
+    <TouchableOpacity
+      style={{ padding: 16, borderBottomWidth: 1, borderColor: '#ddd' }}
+      onPress={() => abrirChat(item)}
+    >
+      <Text style={{ fontSize: 16, fontWeight: '600' }}>Chat #{item.id}</Text>
+      <Text style={{ color: '#555' }}>{item.ultimoMensaje}</Text>
+      <Text style={{ fontSize: 12, color: '#999' }}>{item.fecha}</Text>
+    </TouchableOpacity>
+  );
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      {chats.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>No hay chats disponibles</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={chats}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+      )}
+    </View>
   );
 };
 
 export default ChatsListScreen;
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.gray[50] },
-  scroll: { padding: spacing.lg },
-  title: {
-    fontSize: fontSize["2xl"],
-    fontWeight: "bold",
-    marginBottom: spacing.lg,
-    color: colors.gray[900],
-  },
-  chatItem: {
-    backgroundColor: colors.white,
-    padding: spacing.lg,
-    borderRadius: 12,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.gray[200],
-  },
-  chatTitle: {
-    fontSize: fontSize.xl,
-    fontWeight: "600",
-    color: colors.gray[900],
-  },
-  chatSubtitle: {
-    fontSize: fontSize.sm,
-    color: colors.gray[600],
-    marginTop: spacing.xs,
-  },
-  emptyText: {
-    textAlign: "center",
-    marginTop: spacing.xl,
-    color: colors.gray[500],
-    fontSize: fontSize.base,
-  },
-});

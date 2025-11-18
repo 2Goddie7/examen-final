@@ -3,6 +3,23 @@ import { PlanMovil, CreatePlanDTO } from '../../domain/entities';
 import * as ImagePicker from 'expo-image-picker';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import type { Database } from '../../core/supabase/database.types';
+import Constants from 'expo-constants';
+
+function uriToBlob(uri: string): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function () {
+      reject(new Error("No se pudo convertir la URI a blob"));
+    };
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send(null);
+  });
+}
+
 
 type PlanRow = Database['public']['Tables']['planes_moviles']['Row'];
 type PlanInsert = Database['public']['Tables']['planes_moviles']['Insert'];
@@ -303,33 +320,35 @@ export class PlanesRepository {
 
   // UPLOAD IMAGE
   private async uploadImage(imageUri: string): Promise<{ success: boolean; url?: string; error?: string }> {
-    try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+  try {
+    const fileName = `plan_${Date.now()}.jpg`;
+    const filePath = `planes/${fileName}`;
 
-      const fileName = `plan_${Date.now()}.jpg`;
-      const filePath = `planes/${fileName}`;
+    // 1️⃣ Convertir URI a Blob
+    const blob = await uriToBlob(imageUri);
 
-      const { data, error } = await supabase.storage
-        .from('planes-imagenes')
-        .upload(filePath, blob, {
-          contentType: 'image/jpeg',
-          upsert: false
-        });
+    // 2️⃣ Subir blob directamente usando Supabase SDK
+    const { data, error } = await supabase.storage
+      .from('planes-imagenes')
+      .upload(filePath, blob, {
+        contentType: 'image/jpeg',
+        upsert: true,
+      });
 
-      if (error) throw error;
+    if (error) throw error;
 
-      const { data: urlData } = supabase.storage
-        .from('planes-imagenes')
-        .getPublicUrl(filePath);
+    // 3️⃣ Obtener URL pública
+    const { data: urlData } = supabase.storage
+      .from('planes-imagenes')
+      .getPublicUrl(filePath);
 
-      return { success: true, url: urlData.publicUrl };
-    } catch (error) {
-      return { success: false, error: (error as Error).message };
-    }
+    return { success: true, url: urlData.publicUrl };
+
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
   }
+}
 
-  
 
   // SUBSCRIBE TO CHANGES
   subscribeToPlanes(callback: (payload: any) => void): RealtimeChannel {

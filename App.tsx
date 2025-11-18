@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { RootNavigator } from './src/presentation/navigation/RootNavigator';
 import { NotificationsService } from './src/data/services/NotificationsService';
-
+import { Buffer } from 'buffer';
+(global as any).Buffer = Buffer;
 
 export default function App() {
   useEffect(() => {

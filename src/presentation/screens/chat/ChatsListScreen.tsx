@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import { supabase } from "@/core/supabase/client";
+import { supabase } from "../../../core/supabase/client";
 import { useAuthStore } from "../../store/authStore";
 
 export default function ChatsListScreen({ navigation }) {

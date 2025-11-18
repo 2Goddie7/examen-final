@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "final",
     slug: "final",
-    owner:"2goddie7",
+    owner: "ellokitogoddie",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -22,6 +22,7 @@ export default {
     },
 
     android: {
+      package: "com.examendiego.app",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
@@ -41,7 +42,7 @@ export default {
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
 
       eas: {
-        projectId: "5323c5ed-45aa-4cf5-bad8-749cb5af4479"
+        "projectId": "3bb86f29-ff0b-4425-ac54-490123f827cf"
       }
     }
   }
