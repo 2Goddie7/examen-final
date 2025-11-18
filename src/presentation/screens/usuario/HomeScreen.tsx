@@ -62,9 +62,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Planes Tigo 📱</Text>
+          <Text style={styles.title}>     📱 PLANES TIGO 📱</Text>
           <Text style={styles.subtitle}>
-            {profile ? `Hola, ${profile.nombreMostrar}` : 'Explora nuestros planes'}
+            {profile ? `Hola, ${profile.nombreMostrar}` : '                 Explora nuestros planes'}
           </Text>
         </View>
 
@@ -83,7 +83,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.planesContainer}>
           {planes.length === 0 ? (
             <EmptyState
-              icon="🔍"
+              icon="😥"
               title="No hay planes"
               message="No se encontraron planes con los filtros aplicados."
               actionLabel="Limpiar Filtros"

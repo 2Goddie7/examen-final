@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { PlanMovil } from '@domain/entities';
+import { PlanMovil } from '../../domain/entities';
 import { colors } from '../styles/colors';
 import { spacing, borderRadius, fontSize } from '../styles/spacing';
 
@@ -81,11 +81,11 @@ export const PlanCard: React.FC<PlanCardProps> = ({
         {showActions && (
           <View style={styles.actions}>
             <TouchableOpacity onPress={onEdit} style={styles.actionButtonEdit}>
-              <Text style={styles.actionButtonText}>✏️ Editar</Text>
+              <Text style={styles.actionButtonText}>✏️ Editar ✏️</Text>
             </TouchableOpacity>
             
             <TouchableOpacity onPress={onDelete} style={styles.actionButtonDelete}>
-              <Text style={styles.actionButtonText}>🗑️ Eliminar</Text>
+              <Text style={styles.actionButtonText}>🗑️ Eliminar 🗑️</Text>
             </TouchableOpacity>
           </View>
         )}
