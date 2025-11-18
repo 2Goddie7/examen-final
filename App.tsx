@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { RootNavigator } from './src/presentation/navigation/RootNavigator';
 import { NotificationsService } from './src/data/services/NotificationsService';
 
+
 export default function App() {
   useEffect(() => {
     const notificationService = NotificationsService.getInstance();
