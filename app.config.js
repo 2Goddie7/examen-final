@@ -4,12 +4,11 @@ export default {
   expo: {
     name: "final",
     slug: "final",
+    owner:"2goddie7",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
-
-    // ❗ Muy importante: Expo Go NO soporta nueva arquitectura
     newArchEnabled: false,
 
     splash: {
@@ -35,12 +34,15 @@ export default {
       favicon: "./assets/favicon.png"
     },
 
-    plugins: [
-      "expo-secure-store"
-    ],
+    plugins: ["expo-secure-store"],
+
     extra: {
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+
+      eas: {
+        projectId: "5323c5ed-45aa-4cf5-bad8-749cb5af4479"
+      }
     }
   }
 };

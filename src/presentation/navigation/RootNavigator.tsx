@@ -42,6 +42,7 @@ export const RootNavigator: React.FC = () => {
           <Stack.Screen name="UsuarioStack" component={UsuarioNavigator} />
         )}
       </Stack.Navigator>
+      
 
       {/* Banner informativo para invitados */}
       {!isAuthenticated && showGuestMode && (
@@ -59,6 +60,7 @@ export const RootNavigator: React.FC = () => {
           </View>
         </View>
       )}
+      
     </NavigationContainer>
   );
 };

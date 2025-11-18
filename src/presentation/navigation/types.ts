@@ -99,3 +99,10 @@ declare global {
     interface RootParamList extends RootStackParamList {}
   }
 }
+
+export type UsuarioTabParamList = {
+  Home: undefined;
+  MisContrataciones: undefined;
+  Perfil: undefined;
+  ChatTab: undefined; // <-- Nuevo
+};

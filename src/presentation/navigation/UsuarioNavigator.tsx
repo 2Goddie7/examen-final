@@ -12,6 +12,8 @@ import PlanDetailScreen from '../screens/usuario/PlanDetailScreen';
 import ChatScreen from '../screens/usuario/ChatScreen';
 import EditProfileScreen from '../screens/usuario/EditProfileScreen';
 import ResetPasswordScreen from '../screens/usuario/ResetPasswordScreen';
+import ChatsListScreen from "../screens/usuario/ChatsListScreen";
+
 
 const Tab = createBottomTabNavigator<UsuarioTabParamList>();
 const Stack = createNativeStackNavigator<UsuarioStackParamList>();
@@ -60,6 +62,15 @@ const TabNavigator: React.FC = () => {
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>👤</Text>,
         }}
       />
+      <Tab.Screen
+        name="ChatTab"
+        component={ChatsListScreen}
+        options={{
+          tabBarLabel: "Chats",
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>💬</Text>,
+        }}
+      />
+
     </Tab.Navigator>
   );
 };
