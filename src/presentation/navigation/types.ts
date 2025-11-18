@@ -1,3 +1,4 @@
+// src/presentation/navigation/types.ts
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
@@ -12,6 +13,26 @@ export type AuthStackParamList = {
 
 export type AuthStackScreenProps<T extends keyof AuthStackParamList> =
   NativeStackScreenProps<AuthStackParamList, T>;
+
+// Invitado/Público Stack (NUEVO)
+export type InvitadoTabParamList = {
+  CatalogoPublico: undefined;
+  Acceder: undefined;
+};
+
+export type InvitadoStackParamList = {
+  MainTabs: undefined;
+  PlanDetailPublico: { planId: string };
+};
+
+export type InvitadoTabScreenProps<T extends keyof InvitadoTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<InvitadoTabParamList, T>,
+    NativeStackScreenProps<InvitadoStackParamList>
+  >;
+
+export type InvitadoStackScreenProps<T extends keyof InvitadoStackParamList> =
+  NativeStackScreenProps<InvitadoStackParamList, T>;
 
 // Usuario Stack
 export type UsuarioTabParamList = {
@@ -65,8 +86,9 @@ export type AsesorTabScreenProps<T extends keyof AsesorTabParamList> =
 export type AsesorStackScreenProps<T extends keyof AsesorStackParamList> =
   NativeStackScreenProps<AsesorStackParamList, T>;
 
-// Root Navigator
+// Root Navigator (ACTUALIZADO)
 export type RootStackParamList = {
+  Invitado: undefined; // NUEVO
   Auth: undefined;
   UsuarioStack: undefined;
   AsesorStack: undefined;
