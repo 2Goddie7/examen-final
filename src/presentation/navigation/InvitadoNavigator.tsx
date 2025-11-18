@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { InvitadoStackParamList, InvitadoTabParamList } from './types';
 import { Text } from 'react-native';
 
-// Screens
+// Screens pantallas 
 import CatalogoPublicoScreen from '../screens/invitado/CatalogoPublicoScreen';
 import PlanDetailPublicoScreen from '../screens/invitado/PlanDetailPublicoScreen';
 import WelcomeScreen from '../screens/auth/WelcomeScreen';
